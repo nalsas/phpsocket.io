@@ -12,7 +12,7 @@ This porject is just trasnlate socket.io by [workerman](https://github.com/walko
 More api just see http://socket.io/docs/server-api/ 
 
 # Install
-composer require workerman/phpsocket.io
+~~composer require workerman/phpsocket.io~~
 
 # Examples
 ## Simple chat
