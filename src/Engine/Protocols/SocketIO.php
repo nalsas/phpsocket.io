@@ -3,7 +3,6 @@ namespace PHPSocketIO\Engine\Protocols;
 use \PHPSocketIO\Engine\Protocols\WebSocket;
 use \PHPSocketIO\Engine\Protocols\Http\Request;
 use \PHPSocketIO\Engine\Protocols\Http\Response;
-use \Workerman\Connection\TcpConnection;
 class SocketIO 
 {
     public static function input($http_buffer, $connection)
@@ -15,7 +14,7 @@ class SocketIO
         $pos = strpos($http_buffer, "\r\n\r\n"); 
         if(!$pos)
         {
-            if(strlen($http_buffer)>=TcpConnection::$maxPackageSize)
+            if(strlen($http_buffer)>=$connection->serv->setting['package_max_length'])
             {
                 $connection->close("HTTP/1.1 400 bad request\r\n\r\nheader too long");
                 return 0;
@@ -30,7 +29,7 @@ class SocketIO
         $connection->httpRequest = $req;
         $connection->httpResponse = $res;
         $connection->hasReadedHead = true;
-        TcpConnection::$statistics['total_request']++;
+        $connection->statistics['total_request']++;
         $connection->onClose = '\PHPSocketIO\Engine\Protocols\SocketIO::emitClose';
         if(isset($req->headers['upgrade']) && strtolower($req->headers['upgrade']) === 'websocket')
         {

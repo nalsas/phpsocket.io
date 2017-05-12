@@ -1,7 +1,8 @@
 <?php
 namespace PHPSocketIO;
-use Workerman\Worker;
+use PHPSocketIO\Swoole\Worker;
 use PHPSocketIO\Engine\Engine;
+
 class SocketIO
 {
     public $nsps = array();
@@ -11,7 +12,7 @@ class SocketIO
     protected $_origins = '*:*';
     protected $_path = null;
     
-    public function __construct($port = null, $opts = array())
+    public function __construct($port = null, $opts = [])
     {
         $adapter = isset($opts['adapter']) ? $opts['adapter'] : '\PHPSocketIO\DefaultAdapter';
         $this->adapter($adapter);
@@ -28,7 +29,7 @@ class SocketIO
         }
         if($port)
         {
-            $worker = new Worker('SocketIO://0.0.0.0:'.$port, $opts);
+            $worker = new Worker('SocketIO://0.0.0.0', $port, $opts);
             $worker->name = 'PHPSocketIO';
 
             if(isset($opts['ssl'])) {
@@ -139,5 +140,9 @@ class SocketIO
     public function write()
     {
         return call_user_func_array(array($this->sockets, 'write'), func_get_args());
+    }
+    
+    public function run(){
+        $this->worker->run();        
     }
 }
