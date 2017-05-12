@@ -1,3 +1,7 @@
+#Currently not working yet!!
+
+
+
 # phpsocket.io
 A server side alternative implementation of [socket.io](https://github.com/socketio/socket.io) in PHP based on [Workerman](https://github.com/walkor/Workerman).<br>
 
